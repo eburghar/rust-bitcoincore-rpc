@@ -1095,7 +1095,7 @@ impl<'a> serde::Serialize for ImportMultiRequestScriptPubkey<'a> {
                 #[derive(Serialize)]
                 struct Tmp<'a> {
                     pub address: &'a Address,
-                };
+                }
                 serde::Serialize::serialize(
                     &Tmp {
                         address: addr,
@@ -1959,6 +1959,53 @@ pub struct Utxo {
     #[serde(with = "bitcoin::util::amount::serde::as_btc")]
     pub amount: bitcoin::Amount,
     pub height: u64,
+}
+
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug)]
+pub struct GetMemoryStatsMode {
+    pub used: u64,
+	pub free: u64,
+	pub total: u64,
+	pub locked: u64,
+	pub chunks_used: u64,
+	pub chunks_free: u64
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug)]
+pub struct GetMemoryInfoResult {
+    pub locked: GetMemoryStatsMode
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug)]
+pub struct GetMemPoolInfoResult {
+    pub loaded: bool,
+ 	pub size: u64,
+ 	pub bytes: u64,
+ 	pub usage: u64,
+ 	pub maxmempool: u64,
+    #[serde(with = "bitcoin::util::amount::serde::as_btc")]
+ 	pub mempoolminfee: bitcoin::Amount,
+    #[serde(with = "bitcoin::util::amount::serde::as_btc")]
+ 	pub minrelaytxfee: bitcoin::Amount,
+ 	pub unbroadcastcount: u64
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug)]
+pub struct GetChainTxStatsResult {
+	pub time: u64,
+	pub txcount: u64,
+	pub window_final_block_hash: bitcoin::BlockHash,
+	pub window_final_block_height: u64,
+	pub window_block_count: u64,
+	pub window_tx_count: Option<u64>,
+	pub window_interval: Option<u64>,
+	pub tx_rate: Option<u64>
+}
+
+pub enum HashOrHeight {
+   	Hash(bitcoin::BlockHash),
+   	Height(u64)
 }
 
 impl<'a> serde::Serialize for PubKeyOrAddress<'a> {
