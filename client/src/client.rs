@@ -466,6 +466,7 @@ pub trait RpcApi: Sized {
         self.call("getblockstats", &[height.into()])
     }
 
+	// more conforming implementation
     fn get_block_stats2(&self, hash_or_height: json::HashOrHeight, stats: Option<Vec<&str>>) -> Result<json::GetBlockStatsResult> {
         match hash_or_height {
             json::HashOrHeight::Hash(hash) => self.call("getblockstats", &[hash.to_string().into(), opt_into_json(stats)?]),
@@ -1169,19 +1170,24 @@ pub trait RpcApi: Sized {
         self.call("scantxoutset", &["start".into(), into_json(descriptors)?])
     }
 
-    /// Return memory info (only mode=stats supported)
+    /// Returns memory info (only mode=stats supported)
     fn get_memory_info(&self) -> Result<json::GetMemoryInfoResult> {
         self.call("getmemoryinfo", &["stats".into()])
     }
 
-    /// Return mempoolinfo
+    /// Returns mempoolinfo
     fn get_mempool_info(&self) -> Result<json::GetMemPoolInfoResult> {
         self.call("getmempoolinfo", &[])
     }
 
-    /// Return getchaintxstats
+    /// Returns getchaintxstats
     fn get_chain_tx_stats(&self, nblocks: Option<u64>, hash: Option<bitcoin::BlockHash>) -> Result<json::GetChainTxStatsResult> {
         self.call("getchaintxstats", &[opt_into_json(nblocks)?, opt_into_json(hash)?])
+    }
+
+    /// Returns getrpcinfo
+    fn get_rpc_info(&self) -> Result<json::GetRpcInfoResult> {
+        self.call("getrpcinfo", &[])
     }
 }
 

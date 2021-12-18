@@ -2008,6 +2008,17 @@ pub enum HashOrHeight {
    	Height(u64)
 }
 
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug)]
+pub struct RpcCommand {
+	pub method: String,
+	pub duration: u32
+}
+
+#[derive(Serialize, Deserialize, Clone, PartialEq, Eq, Debug)]
+pub struct GetRpcInfoResult {
+	pub active_commands: Vec<RpcCommand>
+}
+
 impl<'a> serde::Serialize for PubKeyOrAddress<'a> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
